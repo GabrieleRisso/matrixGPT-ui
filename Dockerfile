@@ -18,6 +18,7 @@ RUN chmod u+x eDEX-UI-Linux-x86_64.AppImage
 
 RUN mkdir -p .config
 RUN mkdir -p Applications
+RUN mkdir -p .config/eDEX-UI/
 
 RUN bash -c "$(/bin/echo -e "cat << 'EOF' | tee -a appimagelauncher.cfg \
      \n[AppImageLauncher] \
@@ -29,24 +30,6 @@ EOF
 RUN sed -e 's/EOF//g' appimagelauncher.cfg > appimagelauncher.cfgx
 RUN cp appimagelauncher.cfgx .config/appimagelauncher.cfg
 
-#RUN ail-cli integrate eDEX-UI-Linux-x86_64.AppImage
-
-#RUN /bin/sh -c "cp "$(echo $(find ./Applications/ -type f -name 'eD*.AppImage' | sed -e '2s/^.//' ))" Applications/eDEX-UI-Linux-x86_64.AppImage"
-
-
-
-#RUN bash -c "$(/bin/echo -e "cat << 'EOF' | tee -a ail.desktop \
-#     \n[Desktop Entry] \
-#     \nName=ail \
-#     \nExec=ail-cli integrate /home/kasm-user/eDEX-UI-Linux-x86_64.AppImage && cp $(echo $(find ./Applications/ -type f -name 'eD*.AppImage' | sed -e '2s/^.//' )) Applications/eDEX-UI-Linux-x86_64.AppImage \
-#     \nIcon=Inkscape \
-#     \nType=Application \
-#     \nCategories=GTK;GNOME;Utility; ")"\
-#EOF
-
-#RUN cp "$(echo $(find ./Applications/ -type f -name 'eD*.AppImage' | sed -e '2s/^.//' ))" Applications/eDEX-UI-Linux-x86_64.AppImage
-
-
 #RUN ./eDEX-UI-Linux-x86_64.AppImage --appimage-extract-and-run --no-sandbox
 RUN bash -c "$(/bin/echo -e "cat << 'EOF' | tee -a edexui.desktop \
      \n[Desktop Entry] \
@@ -57,26 +40,13 @@ RUN bash -c "$(/bin/echo -e "cat << 'EOF' | tee -a edexui.desktop \
      \nCategories=GTK;GNOME;Utility; ")"\
 EOF
 
-#COPY <<EOF edexui.desktop
-#[Desktop Entry]
-#Name=edexui
-#Exec=/home/kasm-user/eDEX-UI-Linux-x86_64.AppImage
-#Icon=Inkscape
-#Type=Application
-#Categories=GTK;GNOME;Utility;
-#EOF
-
 RUN sed -e 's/EOF//g' edexui.desktop > edexui.desktopx
 RUN cp edexui.desktopx /etc/xdg/autostart/edexui.desktop
 
-#RUN chown root sandbox
-#RUN chmod 4755 sandbox
-#RUN mount -o eDEX-UI-Linux-x86_64.AppImage /mnt
-# now, you can run the contents
-#/mnt/AppRun
-#sudo add-apt-repository ppa:appimagelauncher-team/stable
-#sudo apt-get update
-#sudo apt-get install appimagelauncher
+#copy edex ui settings
+COPY settings.json .config/eDEX-UI/settings.json
+COPY shortcuts.json .config/eDEX-UI/shortcut.json
+COPY light.json .config/eDEX-UI/themes/light.json
 
 ######### End Customizations ###########
 
